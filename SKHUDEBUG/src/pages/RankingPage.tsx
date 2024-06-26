@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User } from '../utlis/users';
-import '../styles/Ranking.css';
+import '../styles/Ranking.less';
 
 interface RankingProps {
   initialUsers: User[];
