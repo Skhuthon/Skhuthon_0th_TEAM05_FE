@@ -1,19 +1,16 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import './App.css';
-import Home from './pages/Home';
-import Ranking from './pages/RankingPage';
-import { users as initialUsers } from './utlis/users';
+import { Route, Routes } from "react-router-dom";
+import SignUpPage from "./pages/SignUpPage";
+import LoginPage from "./pages/LoginPage";
+import MainPage from "./pages/MainPage";
 
-const App: React.FC = () => {
+function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/ranking" element={<Ranking initialUsers={initialUsers} />} />
-      </Routes>
-    </Router>
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/signup" element={<SignUpPage />} />
+      <Route path="/" element={<MainPage />} />
+    </Routes>
   );
-};
+}
 
 export default App;
