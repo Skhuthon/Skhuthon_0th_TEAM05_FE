@@ -2,7 +2,7 @@ import baseStyles from "../styles/BaseStyles.module.less";
 import styles from "../styles/SignUpPage.module.less";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CustomAxios from "../api/Axios";
+import { signup } from "../service/UserService";
 
 const SignUpPage = () => {
   const navigate = useNavigate();
@@ -31,9 +31,12 @@ const SignUpPage = () => {
   };
   const onChangeID = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
+    const idRule = /^(?=.*[A-Za-z].*[A-Za-z])[A-Za-z\d]{6,}$/;
     setID(e.target.value);
     if (e.target.value === "") {
       setIDMsg("아이디: 필수정보입니다.");
+    } else if (!idRule.test(e.target.value)) {
+      setIDMsg("아이디는 6자 이상 영문이어야합니다.");
     } else {
       setIDMsg("");
       setIsid(true);
@@ -41,9 +44,15 @@ const SignUpPage = () => {
   };
   const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
+    const passwordRule =
+      /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/; // 8자 이상, 대문자, 소문자, 숫자, 특수문자 한 개 이상포함
     setPassword(e.target.value);
     if (e.target.value === "") {
       setPasswordMsg("비밀번호: 필수정보입니다.");
+    } else if (!passwordRule.test(e.target.value)) {
+      setPasswordMsg(
+        "비밀번호는 8자 이상, 대문자, 소문자, 숫자, 특수문자 한 개 이상 포함해야 합니다."
+      );
     } else {
       setPasswordMsg("");
       setIspassword(true);
@@ -52,7 +61,9 @@ const SignUpPage = () => {
   const onChangeCheckPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setCheckPassword(e.target.value);
-    if (e.target.value === password) {
+    if (e.target.value === "") {
+      setCheckPasswordMsg("비밀번호를 입력해주세요.");
+    } else if (e.target.value === password.trim()) {
       setCheckPasswordMsg("비밀번호가 일치합니다.");
     } else {
       setCheckPasswordMsg("비밀번호를 다시 확인해주세요");
@@ -81,28 +92,16 @@ const SignUpPage = () => {
 
     return true;
   };
-  const signup = async (e: React.FormEvent) => {
+  const signupSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (checkInput()) {
       try {
-        const response = await CustomAxios.post(
-          "/user/join",
-          {
-            loginId: id,
-            password,
-            nickname,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const response = await signup(id, password, nickname);
         if (response.status === 200) {
           navigate("/login");
         }
       } catch (error) {
-        console.log(error);
+        console.error("회원가입 실패", error);
       }
     }
   };
@@ -150,7 +149,11 @@ const SignUpPage = () => {
           <p>{checkPasswordMsg}</p>
         </div>
 
-        <button className={styles.signupBtn} type="submit" onClick={signup}>
+        <button
+          className={styles.signupBtn}
+          type="submit"
+          onClick={signupSubmit}
+        >
           가입하기
         </button>
       </div>
