@@ -25,7 +25,7 @@ const Ranking: React.FC<RankingProps> = ({ initialUsers }) => {
       </div>
       <div className="ranking-list">
         {sortedUsers.map((user, index) => (
-          <div key={user.id} className="ranking-item">
+          <div key={user.id} className={`ranking-item ${index === 1 ? 'highlight' : ''}`}>
             <span className="rank">{index + 1}등</span>
             <span className="username">{user.name}</span>
           </div>
