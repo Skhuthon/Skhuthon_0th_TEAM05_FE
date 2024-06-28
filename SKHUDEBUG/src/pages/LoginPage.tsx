@@ -84,17 +84,20 @@ const LoginPage = () => {
             />
           </div>
         </div>
-        <div className={styles.loginBtn} onClick={loginSubmit}>
+        <button className={styles.loginBtn} onClick={loginSubmit}>
           <p>로그인</p>
-        </div>
+        </button>
         <ul className={styles.messagebox}>
           {idMessage && <li>•{idMessage}</li>}
           {passwordMessage && <li>•{passwordMessage}</li>}
           {loginMessage && <li>•{loginMessage}</li>}
         </ul>
-        <div className={styles.signupBtn} onClick={() => navigate("/signup")}>
+        <button
+          className={styles.signupBtn}
+          onClick={() => navigate("/signup")}
+        >
           <p>회원가입</p>
-        </div>
+        </button>
       </div>
     </div>
   );

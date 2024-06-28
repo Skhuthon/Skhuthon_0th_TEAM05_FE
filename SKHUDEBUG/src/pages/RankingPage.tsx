@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchRanking } from '../api/rankingApi';
 import '../styles/Ranking.less';
+//더미전
 
 interface User {
   nickname: string;
@@ -16,16 +17,18 @@ const Ranking: React.FC = () => {
     const getRankingData = async () => {
       try {
         const data = await fetchRanking();
-        setUsers(data);
+        if (Array.isArray(data)) {
+          setUsers(data);
+        } else {
+          console.error('예기치 않은 데이터 형식:', data);
+        }
       } catch (error) {
-        console.error('Failed to fetch ranking data', error);
+        console.error('순위 데이터를 가져오지 못함', error);
       }
     };
 
     getRankingData();
   }, []);
-
-  const sortedUsers = [...users].sort((a, b) => b.times - a.times);
 
   return (
     <div className="ranking-container">
@@ -38,7 +41,7 @@ const Ranking: React.FC = () => {
         <h2>버그헌터 랭킹</h2>
       </div>
       <div className="ranking-list">
-        {sortedUsers.map((user, index) => (
+        {users.map((user, index) => (
           <div key={index} className="ranking-item">
             <span className="rank">{index + 1}등</span>
             <span className="username">{user.nickname}</span>

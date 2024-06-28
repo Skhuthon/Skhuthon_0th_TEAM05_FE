@@ -9,3 +9,5 @@ export const fetchRanking = async () => {
     throw error;
   }
 };
+
+//더미전
