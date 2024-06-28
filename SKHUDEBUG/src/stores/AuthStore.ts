@@ -3,8 +3,8 @@ import CustomAxios from "../api/Axios.tsx";
 
 class AuthStore {
   isLoggedIn: boolean = false;
-  userID: string | "" = "";
-  userName: string | "" = "000";
+  userLoginId: string | "" = "";
+  userNickName: string | "" = "000";
   constructor() {
     makeAutoObservable(this, {
       login: action,
@@ -17,22 +17,18 @@ class AuthStore {
     try {
       const response = await CustomAxios.get("/user/confirm");
       if (response.status === 200) {
-        const userData = response.data;
-        if (userData.length >= 2) {
-          const userName = userData[0];
-          const userID = userData[1];
-
-          this.login(userName, userID);
-        }
+        const userLoginId = response.data.loginId;
+        const userNickName = response.data.nickname;
+        this.login(userLoginId, userNickName);
       }
     } catch (error) {
       this.logout();
     }
   }
-  login = (userName: string, userID: string) => {
+  login = (userNickName: string, userLoginId: string) => {
     this.isLoggedIn = true;
-    this.userName = userName;
-    this.userID = userID;
+    this.userNickName = userNickName;
+    this.userLoginId = userLoginId;
   };
 
   logout = async () => {
@@ -48,8 +44,8 @@ class AuthStore {
 
   setLoggedOut() {
     this.isLoggedIn = false;
-    this.userName = "000";
-    this.userID = "";
+    this.userNickName = "000";
+    this.userLoginId = "";
   }
 }
 
