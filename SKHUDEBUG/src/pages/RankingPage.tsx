@@ -1,17 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User } from '../utlis/users';
+import { fetchRanking } from '../api/rankingApi';
 import '../styles/Ranking.less';
 
-interface RankingProps {
-  initialUsers: User[];
+interface User {
+  nickname: string;
+  times: number;
 }
 
-const Ranking: React.FC<RankingProps> = ({ initialUsers }) => {
-  const [users] = useState<User[]>(initialUsers);
+const Ranking: React.FC = () => {
+  const [users, setUsers] = useState<User[]>([]);
   const navigate = useNavigate();
 
-  const sortedUsers = [...users].sort((a, b) => b.acceptedRequests - a.acceptedRequests);
+  useEffect(() => {
+    const getRankingData = async () => {
+      try {
+        const data = await fetchRanking();
+        setUsers(data);
+      } catch (error) {
+        console.error('Failed to fetch ranking data', error);
+      }
+    };
+
+    getRankingData();
+  }, []);
+
+  const sortedUsers = [...users].sort((a, b) => b.times - a.times);
 
   return (
     <div className="ranking-container">
@@ -25,9 +39,10 @@ const Ranking: React.FC<RankingProps> = ({ initialUsers }) => {
       </div>
       <div className="ranking-list">
         {sortedUsers.map((user, index) => (
-          <div key={user.id} className={`ranking-item ${index === 1 ? 'highlight' : ''}`}>
+          <div key={index} className="ranking-item">
             <span className="rank">{index + 1}등</span>
-            <span className="username">{user.name}</span>
+            <span className="username">{user.nickname}</span>
+            <span className="times">{user.times}회</span>
           </div>
         ))}
       </div>
