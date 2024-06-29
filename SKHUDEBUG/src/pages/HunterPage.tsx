@@ -6,11 +6,13 @@ import styles from "../styles/HunterPage.module.less";
 // import { getAllMaker } from "../service/UserService";
 // import mapStore from "../stores/MapStore";
 import { getAll } from "../service/UserService";
+import HunterAccept from "../components/HunterAccept";
 
 const HunterPage = observer(() => {
   const userNickName = window.localStorage.getItem("nickName");
 
   const [bugHunts, setBugHunts] = useState<BugHunt[]>([]);
+  const [ModalStatus, setModalStatus] = useState<boolean>(false);
 
   useEffect(() => {
     const getLocation = async () => {
@@ -30,6 +32,11 @@ const HunterPage = observer(() => {
 
               const bugHunts: BugHunt[] = response.data.data.bughunts;
 
+              const requestId = bugHunts[0];
+              const senderId = bugHunts[0].loginId;
+              window.localStorage.setItem("requestId", String(requestId));
+              window.localStorage.setItem("senderId", String(senderId));
+              console.log(senderId);
               console.log(bugHunts);
               setBugHunts(bugHunts);
             },
@@ -52,7 +59,9 @@ const HunterPage = observer(() => {
     <div className={baseStyles.Container}>
       <div className={styles.HunterContainer}>
         <div className={styles.mapBox}>
-          <MapWithSearch bugHunts={bugHunts} findHunterStatus={true} />
+          {ModalStatus && <HunterAccept setModalStatus={setModalStatus} />}
+
+          <MapWithSearch bugHunts={bugHunts} />
         </div>
         <div className={styles.userInfor}>
           <div className={styles.userImg}>

@@ -82,6 +82,7 @@ export const getMarker = async (loginId: string) => {
 
 export const hunterConnection = async (loginId: string) => {
   const response = await CustomAxios.get(`/bughunt/sse?loginId=${loginId}`);
+  console.log(response.data);
   return response;
 };
 
@@ -104,6 +105,19 @@ export const getAllMaker = async (
 
 export const getAll = async () => {
   const response = await CustomAxios.get("/bughunt");
-  console.log(response);
+  console.log(response.data);
+  return response;
+};
+
+export const HunterAccept2 = async (
+  senderId: string,
+  receiverId: string,
+  requestId: number
+) => {
+  const response = CustomAxios.post("/bughunt-matching", {
+    senderId,
+    receiverId,
+    requestId,
+  });
   return response;
 };
