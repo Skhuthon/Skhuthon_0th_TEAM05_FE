@@ -1,4 +1,7 @@
 {
+  "compilerOptions": {
+    "types": ["./src/@types"]
+  },
   "files": [],
   "references": [
     {

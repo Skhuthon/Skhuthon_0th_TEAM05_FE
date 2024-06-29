@@ -28,6 +28,12 @@ const MainPage = () => {
     }
   };
 
+  const clickBugHunter = () => {
+    if (loginCheck) {
+      navigate("/hunter");
+    }
+  };
+
   return (
     <div className={baseStyles.Container}>
       <div className={styles.TopPage}>
@@ -43,7 +49,7 @@ const MainPage = () => {
           <button className={styles.bugBtn} onClick={clickBugJobOffer}>
             <p>버그헌터 구인</p>
           </button>
-          <button className={styles.bugBtn}>
+          <button className={styles.bugBtn} onClick={clickBugHunter}>
             <p>버그 헌팅하기</p>
           </button>
         </div>
