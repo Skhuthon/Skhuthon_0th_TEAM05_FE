@@ -56,6 +56,7 @@ const JobOfferPage = observer(() => {
       }
   };
 
+  console.log(mapStore.bugModalStatus);
   useEffect(() => {
     const loginId = window.localStorage.getItem("loginId");
     if (findHunterStatus && loginId !== null) {
