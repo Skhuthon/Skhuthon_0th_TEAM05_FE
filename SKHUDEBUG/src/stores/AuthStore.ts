@@ -18,6 +18,7 @@ class AuthStore {
       const response = await CustomAxios.get("/user/confirm");
       if (response.status === 200) {
         const userLoginId = response.data.loginId;
+        window.localStorage.setItem("loginId", userLoginId);
         const userNickName = response.data.nickname;
         this.login(userLoginId, userNickName);
       }
