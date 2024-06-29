@@ -20,6 +20,7 @@ class AuthStore {
         const userLoginId = response.data.loginId;
         window.localStorage.setItem("loginId", userLoginId);
         const userNickName = response.data.nickname;
+        window.localStorage.setItem("nickName", userNickName);
         this.login(userLoginId, userNickName);
       }
     } catch (error) {
