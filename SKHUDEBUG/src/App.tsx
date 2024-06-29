@@ -3,6 +3,7 @@ import SignUpPage from "./pages/SignUpPage";
 import LoginPage from "./pages/LoginPage";
 import MainPage from "./pages/MainPage";
 import JobOfferPage from "./pages/JobOfferPage";
+import Ranking from './pages/RankingPage';
 
 function App() {
   return (
@@ -11,8 +12,14 @@ function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignUpPage />} />
       <Route path="/" element={<MainPage />} />
+      <Route path="/ranking" element={<Ranking />} />
+
     </Routes>
   );
 }
 
 export default App;
+
+
+
+

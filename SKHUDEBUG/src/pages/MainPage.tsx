@@ -28,6 +28,17 @@ const MainPage = () => {
     }
   };
 
+  const clickBugHunter = () => {
+    if (loginCheck) {
+      navigate("/hunter");
+    }
+  };
+
+  const clickRanking = () => {
+    navigate("/ranking");
+  };
+
+
   return (
     <div className={baseStyles.Container}>
       <div className={styles.TopPage}>
@@ -43,7 +54,7 @@ const MainPage = () => {
           <button className={styles.bugBtn} onClick={clickBugJobOffer}>
             <p>버그헌터 구인</p>
           </button>
-          <button className={styles.bugBtn}>
+          <button className={styles.bugBtn} onClick={clickBugHunter}>
             <p>버그 헌팅하기</p>
           </button>
         </div>
@@ -53,9 +64,10 @@ const MainPage = () => {
           <p>버그헌터 랭킹</p>
           <p>당신이 잡은 벌레를 전시하고 랭킹을 올려보세요!</p>
         </div>
-        <button className={styles.bugBtn}>
+        <button className={styles.bugBtn} onClick={clickRanking}>
           <p>버그헌터 랭킹</p>
         </button>
+
       </div>
     </div>
   );
