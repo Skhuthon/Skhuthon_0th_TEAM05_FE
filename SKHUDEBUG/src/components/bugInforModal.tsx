@@ -15,6 +15,7 @@ const BugInforModal: React.FunctionComponent<bugInforProps> = ({
   responseBugNum,
 }) => {
   console.log(responseBugNum, responseBugSize, responseBugType);
+
   return (
     <div className={styles.bugInforModal}>
       <div className={styles.inforBox}>

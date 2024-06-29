@@ -65,7 +65,6 @@ const MainPage = () => {
         <button className={styles.bugBtn} onClick={clickRanking}>
           <p>버그헌터 랭킹</p>
         </button>
-
       </div>
     </div>
   );

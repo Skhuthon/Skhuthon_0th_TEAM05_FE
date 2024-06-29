@@ -3,8 +3,6 @@ import { observer } from "mobx-react-lite";
 import MapWithSearch from "../components/Map";
 import baseStyles from "../styles/BaseStyles.module.less";
 import styles from "../styles/HunterPage.module.less";
-// import { getAllMaker } from "../service/UserService";
-// import mapStore from "../stores/MapStore";
 import { getAll } from "../service/UserService";
 import HunterAccept from "../components/HunterAccept";
 
@@ -23,11 +21,7 @@ const HunterPage = observer(() => {
               const latitude = position.coords.latitude;
               const longitude = position.coords.longitude;
               console.log("현재위치", latitude, longitude);
-              //   const response = await getAllMaker(
-              //     latitude,
-              //     longitude,
-              //     mapStore.radius
-              //   );
+
               const response = await getAll();
 
               const bugHunts: BugHunt[] = response.data.data.bughunts;
