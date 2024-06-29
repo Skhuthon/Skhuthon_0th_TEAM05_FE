@@ -2,35 +2,39 @@ import baseStyles from "../styles/BaseStyles.module.less";
 import styles from "../styles/MainPage.module.less";
 import AuthStore from "../stores/AuthStore";
 import { useNavigate } from "react-router-dom";
-import { observer } from "mobx-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import LoginStatusModal from "../components/LoginStatusModal";
 
 const MainPage = () => {
   const navigate = useNavigate();
-  const { isLoggedIn, userName } = AuthStore;
+  const [loginCheck, setLoginCheck] = useState<boolean>(false);
+
   useEffect(() => {
-    const loginCheck = async () => {
+    const checkLogin = async () => {
       try {
         await AuthStore.checkLoginStatus();
-        if (AuthStore.isLoggedIn) {
-        }
+        setLoginCheck(AuthStore.isLoggedIn);
       } catch (error) {
         console.log(error);
       }
     };
 
-    loginCheck();
+    checkLogin();
   }, []);
 
   const clickBugJobOffer = () => {
-    navigate("/joboffer");
+    if (loginCheck) {
+      navigate("/joboffer");
+    }
   };
+
   return (
     <div className={baseStyles.Container}>
       <div className={styles.TopPage}>
         <div className={styles.nameBox}>
           <p>스쿠:디버그</p>
         </div>
+        {!loginCheck && <LoginStatusModal />}
         <div className={styles.inforBox}>
           <p>벌레퇴치 구인</p>
           <p>도움!! 집에 벌레가 있는 당신</p>
