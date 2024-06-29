@@ -37,8 +37,6 @@ const MainPage = () => {
   const clickRanking = () => {
     navigate("/ranking");
   };
-
-
   return (
     <div className={baseStyles.Container}>
       <div className={styles.TopPage}>

@@ -75,7 +75,35 @@ export const findHunter = async (
   }
 };
 
-export const getMaker = async (loginId: string) => {
+export const getMarker = async (loginId: string) => {
   const response = await CustomAxios.get(`/bughunt/user?loginId=${loginId}`);
+  return response;
+};
+
+export const hunterConnection = async (loginId: string) => {
+  const response = await CustomAxios.get(`/bughunt/sse?loginId=${loginId}`);
+  return response;
+};
+
+export const getAllMaker = async (
+  latitude: number,
+  longitude: number,
+  radius: number
+) => {
+  try {
+    console.log(typeof latitude, typeof longitude, typeof radius);
+    const response = await CustomAxios.get(
+      `/bughunt/nearby?latitude=${latitude}48753568112547&longitude=${longitude}&radius=${radius}`
+    );
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const getAll = async () => {
+  const response = await CustomAxios.get("/bughunt");
+  console.log(response);
   return response;
 };

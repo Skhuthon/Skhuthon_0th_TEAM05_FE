@@ -2,58 +2,84 @@ import baseStyles from "../styles/BaseStyles.module.less";
 import styles from "../styles/JobOfferPage.module.less";
 import MapWithSearch from "../components/Map";
 import { useForm } from "../hooks/useForm";
-import { useState } from "react";
-import { findHunter, getMaker } from "../service/UserService";
-const JobOfferPage = () => {
+import { useState, useEffect } from "react";
+import {
+  findHunter,
+  getMarker,
+  hunterConnection,
+} from "../service/UserService";
+import BugInforModal from "../components/bugInforModal";
+import { observer } from "mobx-react-lite";
+import mapStore from "../stores/MapStore";
+
+const JobOfferPage = observer(() => {
   const [bugNum, onChangeBugNum] = useForm();
   const [bugSize, onChangeBugSize] = useForm();
   const [bugType, onChangeBugType] = useForm();
-  const [latitude, setLatitude] = useState<number>(0);
-  const [longitude, setLongitude] = useState<number>(0);
-  const [radius, onChangeRadius] = useForm();
+  const [responseLoginId, setResponseLoginId] = useState<string>("");
+  const [responseBugSize, setResponseBugSize] = useState<string>("");
+  const [responseBugNum, setResponseBugNum] = useState<number>(0);
+  const [responseBugType, setResponseBugType] = useState<string>("");
+  const [findHunterStatus, setFindHunterStatus] = useState<boolean>(false);
 
   const FindHunter = async () => {
-    if (bugNum && bugSize && bugType !== " ")
-      if (latitude && longitude && Number(radius) !== 0) {
+    if (bugNum && bugSize && bugType !== "")
+      if (mapStore.latitude && mapStore.longitude && mapStore.radius !== 0) {
         try {
           const loginId = window.localStorage.getItem("loginId");
           if (!loginId) {
             console.log("로그인 상태가 아닙니다.");
             return;
           }
+
           const response = await findHunter(
             loginId,
-            latitude,
-            longitude,
+            mapStore.latitude,
+            mapStore.longitude,
             Number(bugNum),
             bugSize,
             bugType,
-            Number(radius)
+            mapStore.radius
           );
+
           if (response.status === 200) {
-            console.log("헌터 호출 성공");
-            await getMaker(loginId);
+            setResponseLoginId(response.data.loginId);
+            setResponseBugNum(response.data.bugNum);
+            setResponseBugType(response.data.bugType);
+            setResponseBugSize(response.data.bugSize);
+            setFindHunterStatus(true);
+            await hunterConnection(loginId);
           }
         } catch (error) {
           console.log(error);
         }
       }
   };
+
+  useEffect(() => {
+    const loginId = window.localStorage.getItem("loginId");
+    if (findHunterStatus && loginId !== null) {
+      getMarker(loginId);
+    }
+  }, [findHunterStatus]);
+
   return (
     <div className={baseStyles.Container}>
       <div className={styles.TopBox}>
         <p>희망 지역</p>
       </div>
       <div className={styles.mapBox}>
-        <MapWithSearch
-          setLatitude={setLatitude}
-          setLongitude={setLongitude}
-          onChangeRadius={onChangeRadius}
-          radius={Number(radius)}
-          latitude={latitude}
-          longitude={longitude}
-        />
+        {mapStore.bugModalStatus && (
+          <BugInforModal
+            responseLoginId={responseLoginId}
+            responseBugNum={responseBugNum}
+            responseBugSize={responseBugSize}
+            responseBugType={responseBugType}
+          />
+        )}
+        <MapWithSearch findHunterStatus={findHunterStatus} />
       </div>
+
       <div className={styles.searchBox}>
         <div className={styles.searchInfor}>
           <div className={styles.bugInput}>
@@ -93,6 +119,6 @@ const JobOfferPage = () => {
       </div>
     </div>
   );
-};
+});
 
 export default JobOfferPage;
